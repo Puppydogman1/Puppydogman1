@@ -15,8 +15,16 @@ https://www.cybersecurity-help.cz/vdb/
 https://cvecrowd.com/
 https://cvexploits.io/
 
+Diagrams:
+https://app.diagrams.net/
+
 Email:
 https://mxtoolbox.com/SuperTool.aspx
+
+File Analysis:
+https://qrcoderaptor.com/
+https://www.filescan.io/scan
+https://www.tineye.com/
 
 IoC(s):
 https://uncoder.io/
@@ -34,11 +42,23 @@ https://www.kqlsearch.com/
 Malware:
 https://bazaar.abuse.ch/browse/
 
+OSINT:
+https://osintframework.com/
+https://start.me/p/9E5BLR/canosint
+https://start.me/p/DPYPMz/the-ultimate-osint-collection
+https://inteltechniques.com/tools/Username.html
+
 Playbooks:
 https://gitlab.com/syntax-ir/playbooks/-/tree/main
 
 Regex:
 https://regex101.com/
+
+Security Controls:
+https://www.opensecurityarchitecture.org/cms/library/0802control-catalogue
+
+Stats:
+https://purplesec.us/resources/cybersecurity-statistics/#Malware
 
 Steganography:
 https://www.aperisolve.com/
