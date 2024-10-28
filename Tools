@@ -1,0 +1,8 @@
+Shodan:
+A search engine for devices connected to the Internet. It allows you to search for specific types and versions of servers, networking equipment, industrial control systems, and IoT devices.
+Search Query Examples: https://www.shodan.io/search/examples
+Trends: https://trends.shodan.io/
+
+Censys:
+Focuses on Internet-connected hosts, websites, certificates, and other Internet assets. Some of its use cases include enumerating domains in use, auditing open ports and services, and discovering rogue assets within a network.
+Censys Search Use Cases: https://support.censys.io/hc/en-us/articles/20720064229140-Censys-Search-Use-Cases
