@@ -1,0 +1,520 @@
+https://www.geeksforgeeks.org/linux-commands-cheat-sheet/
+
+1. pwd command
+The pwd command (print working directory) is a shell builtin command that prints the current location. The output shows an absolute directory path, starting with the root directory (/).
+
+The general syntax is:
+
+pwd <options>
+
+To see how the command works, run the following in the terminal:
+
+pwd
+
+pwd terminal output
+The output prints the current location in the /home/<username> format.
+
+2. ls command
+The ls command (list) prints a list of the current directory's contents. Run the following:
+
+ls
+
+ls terminal output
+Additional options provide flexibility with the display output. Typical usage includes combining the following options:
+
+Show as a list:
+ls -l
+
+Show as a list and include hidden files:
+ls -la
+
+Show sizes in a human-readable format:
+ls -lah
+
+3. cd command
+The cd command (change directory) is a shell builtin command for changing the current working directory:
+
+cd <directory>
+
+For example, to move to the Document directory, run:
+
+cd Documents
+
+cd documents terminal output
+The working directory changes in the terminal interface. In a non-default interface, use the pwd command to check the current directory.
+
+Use cd without any parameters to return to the home directory (~).
+
+4. cat command
+The cat command (concatenate) displays the contents of a file in the terminal (standard output or stdout). To use the command, provide a file name from the current directory:
+
+cat <filename>
+
+cat file.txt terminal output
+Alternatively, provide a path to the file along with the file name:
+
+cat <path>/<filename>
+
+The command can also:
+
+Display contents of multiple files:
+cat <file 1> <file 2>
+
+Create new files:
+cat ><filename>
+
+Add contents to the file and press CTRL+D to exit.
+
+Display line numbers:
+cat -n <filename>
+
+5. touch command
+The primary purpose of the touch command is to modify an existing file's timestamp. To use the command, run:
+
+touch <filename>
+
+touch new_file.txt terminal output
+The command creates an empty file if it does not exist. Due to this effect, touch is also a quick way to make a new file (or a batch of files).
+
+6. cp command
+The main way to copy files and directories in Linux is through the cp command (copy). Try the command with:
+
+cp <source file> <target file>
+
+cp file.txt file_copy.txt terminal output
+The source and target files must have different names since the command copies in the same directory. Provide a path before the file name to copy to another location.
+
+7. mv command
+Use the mv command (move) to move files or directories from one location to another. For example, to move a file from the current directory to ~/Documents, run:
+
+mv <filename> ~/Documents/<filename>
+
+mv file.txt to documents terminal output
+8. mkdir command
+The mkdir command (make directory) creates a new directory in the provided location. Use the command in the following format:
+
+mkdir <directory name>
+
+mkdir new_directory terminal output
+Provide a path to create a directory in the given location, or use a space or comma-separated list to create multiple directories simultaneously.
+
+9. rmdir command
+Use the rmdir command (remove directory) to delete an empty directory. For example:
+
+rmdir <directory name>
+
+rmdir new_directory terminal output
+If the directory is not empty, the command fails.
+
+10. rm command
+The rm command (remove) deletes files or directories. To use the command for non-empty directories, add the -r tag:
+
+rm -r <file or directory>
+
+rm -r documents directory terminal output
+Unlike the rmdir command, rm also removes all the contents from the directory.
+
+Note: Removing some directories in Linux is dangerous. Make sure you know what you're removing before running a dangerous Linux terminal command.
+
+11. locate command
+The locate command is a simple Linux tool for finding a file. The command checks a file database on a system to perform the search quickly. However, the result is sometimes inaccurate if the database is not updated.
+
+To use the command, install locate and try the following example:
+
+locate <filename>
+
+locate file.txt terminal output
+The output prints the file's location path. The matching is unclear and outputs any file that contains the file name.
+
+12. find command
+Use the find command to perform a thorough search on the system. Add the -name tag to search for a file or directory by name:
+
+find -name <file or directory>
+
+find -name file.txt terminal output
+The output prints the file's path and performs an exact match. Use additional options to control the search further.
+
+13. grep command
+The grep command (global regular expression print) enables searching through text in a file or a standard output. The basic syntax is:
+
+grep <search string> <filename>
+
+grep world file terminal output
+The output highlights all matches. Advanced commands include using grep for multiple strings or writing grep regex statements.
+
+14. sudo command
+The sudo command (superuser do) elevates a user's permissions to administrator or root. Commands that change system configuration require elevated privilege.
+
+Add sudo as a prefix to any command that requires elevated privileges:
+
+sudo <command>
+
+Use the command with caution to avoid making accidental changes permanent.
+
+Note: Learn more about Linux file permissions.
+
+15. df command
+The df command (disk free) is used to check available disk space on the file system. To see how df works, run the following:
+
+df
+
+df terminal output
+The output shows the amount of space used by different drives. Add the -h tag to make the output in human-readable format (kilobytes, megabytes, and gigabytes).
+
+16. du command
+The du (disk usage) command helps show how much space a file or directory takes up. Run the command without any parameters:
+
+du
+
+du terminal output
+The output shows the amount of space used by files and directories in the current directory. The size displays in blocks, and adding the -h tag changes the measure to human-readable format.
+
+17. head command
+Use the head command to truncate long outputs. The command can truncate files, for example:
+
+head <filename>
+
+Alternatively, pipe head to a command with a long output:
+
+<command> | head
+
+For example, to see the first ten lines of the du command, run:
+
+du | head
+
+du head terminal output
+The output shows the first ten lines instead of everything.
+
+18. tail command
+The Linux tail command does the opposite of head. Use the command to show the last ten lines of a file:
+
+tail <filename>
+
+Or pipe tail to a command with a long output:
+
+<command> | tail
+
+For example, use tail to see the last ten lines of the du command:
+
+du | tail
+
+du tail terminal output
+Both head and tail commands are helpful when reading Linux log files.
+
+19. diff command
+The diff command (difference) compares two files and prints the difference. To use the command, run:
+
+diff <file 1> <file 2>
+
+For example, to compare files test1.txt and test2.txt, run:
+
+diff file1.txt file2.txt
+
+diff file1.txt file2.txt terminal output
+Developers often use diff to compare versions of the same code.
+
+Note: Learn how to utilize diff --color to change the color of the output.
+
+20. tar command
+The tar command (tape archiver) helps archive, compress, and extract archived files.
+
+The command manages and creates files known as tarballs, which often appear during installation processes. The options provide different functionalities depending on the task.
+
+21. chmod command
+Use the chmod (change mode) command to change file and directory permissions. The command requires setting the permission code and the file or directory to which the permissions apply.
+
+For example:
+
+chmod <permission> <file or directory>
+
+The permission is a number code consisting of three numbers:
+
+The first number is the permission of the current user (owner).
+The second number is the permission for the group.
+The third number is permissions for everyone else.
+For example, to change the file permissions for a test.txt file so anyone can read, write, and execute, run:
+
+chmod 777 file.txt
+
+chmod 777 file.txt terminal output
+Note: Allowing anyone to read, write, and execute files is considered a bad security practice. Implement privileged access management to maximize security on your system.
+
+22. chown command
+The chown command (change ownership) changes the ownership of a file or directory. To transfer ownership, use the following command as sudo:
+
+sudo chown <new owner name or UID> <file or directory>
+
+For example:
+
+sudo chown bob file.txt
+
+sudo chown bob file.txt terminal output
+Configuring ownership is a common task during installations. The chown command allows daemons and processes to access files during setup.
+
+23. ps command
+The ps (process status) command lists processes currently running on the system. Every task creates a single or multiple processes running in the background.
+
+Run ps without any options to see the running processes in the terminal session:
+
+ps
+
+ps terminal output
+The output shows the process ID (PID), the terminal type, CPU time usage, and the command that started the process.
+
+24. top command
+The top command (table of processes) is an extended version of the ps command. Run the command without any options to see the result:
+
+top
+
+top command terminal program output
+The output lists all running processes in real-time. To exit the viewer, press CTRL+C.
+
+25. kill command
+Use the kill command to terminate an unresponsive process. The command syntax is:
+
+kill <signal option> <process ID>
+
+There are sixty-four different signal numbers, but the most commonly used are:
+
+-15 saves all progress before closing the process.
+-9 forces a stop immediately.
+The process ID (PID) is unique for every program. Use the ps or top command to find the PID of a process.
+
+26. ping command
+Use the ping command (packet internet groper) to check internet connectivity. The tool is valuable in troubleshooting networking issues. Add an address to test how it works, for example:
+
+ping google.com
+
+ping google.com terminal output
+The output shows the response time from the website. Press CTRL+C to stop the ping. If no response shows, there's a problem connecting to the host.
+
+27. wget command
+The wget command (WWW get) is used to download files from the internet. Use the following syntax to download a file:
+
+wget <URL>
+
+The command is robust and can continue downloads in unstable and slow networks.
+
+Note: Learn how to solve wget: command not found error.
+
+28. uname command
+Use the uname command (Unix name) to print system information. Add the -a option to print a complete overview:
+
+uname -a
+
+uname -a terminal output
+The output shows the kernel version, OS, processor type, and other helpful information about the system.
+
+29. history command
+The terminal session keeps a history log of commands. To see the list, use the history command:
+
+history
+
+history command terminal output
+Add a number after the command to limit the number of entries if the list is long.
+
+30. man command
+The man command (manual) is a convenient manual available in the terminal. Add man as a prefix to any command to check the manual reference:
+
+man <command>
+
+For example, to check the manual for the man command, run:
+
+man man
+
+man manual page terminal
+To exit the manual, press q.
+
+31. echo command
+Use the echo command to print arguments to the terminal. The syntax is:
+
+echo <argument>
+
+For example, to print Hello, world! to the terminal run:
+
+echo Hello, world!
+
+echo hello world terminal output
+The command helps append text to files, print program results, and display Linux environment variables.
+
+32. hostname command
+To check the DNS name of the current machine, use the hostname command:
+
+hostname
+
+hostname terminal output
+The hostname shows in the terminal as a result. Advanced features include changing the hostname, viewing and changing the system's domain, and checking the IP address.
+
+33. useradd command
+The useradd command creates a new user on a Linux system. Since adding new users requires making changes to system files, add the sudo command to enable access.
+
+The general syntax is:
+
+sudo useradd <username>
+
+The command creates a non-login user. Additional setup is necessary to activate the user account fully.
+
+Note: The adduser command is the user-friendly version of useradd. Learn about the difference between useradd vs. adduser.
+
+34. userdel command
+Use the userdel (user delete) command to remove a user from the system. Add sudo to enable the elevated privileges, for example:
+
+sudo userdel <username>
+
+The result does not show an output.
+
+35. file command
+The file command provides information about a file, printing the file type and the contents type. To use the command, run:
+
+file <filename>
+
+file file.txt terminal output
+The command does not take into account the file's extension. Instead, file performs testing on the file contents to determine the type.
+
+36. wc command
+The wc command (word count) counts the number of lines, words, and bytes in a file. Provide a filename to count the elements in the file:
+
+wc <filename>
+
+wc file.txt terminal output
+Combine with other commands, such as cat, find, and ls, to perform advanced counts.
+
+37. whoami command
+Use the whoami command to show the currently logged-in user for the shell session:
+
+whoami
+
+whoami command terminal output
+The name of the effective user prints to the screen. Use the command in Bash scripts to show which user is running a script.
+
+38. ip command
+The ip command contains many useful networking functionalities. For example, show the private IP address of the machine with:
+
+ip addr
+
+ip addr terminal output
+The command offers other networking functions, such as IP and routing table management.
+
+39. apt, yum, RPM, pacman
+Package managers help install, delete, and manage software packages on Linux systems. Different distributions of Linux use distinct package managers.
+
+An example install looks like the following:
+
+1. For Ubuntu, use the APT package manager:
+
+apt install <package name>
+
+2. For CentOS and RHEL, use yum or RPM:
+
+yum install <package name>
+
+rpm -i <package name>.rpm
+
+3. For Arch, use pacman:
+
+pacman -S <package name>
+
+40. passwd command
+Use the passwd command to alter your password from the terminal. Run without any parameters:
+
+passwd
+
+passwd terminal output
+The command also helps create a login for a new user added through useradd. Changing another account's password requires elevated privileges.
+
+41. mount command
+The mount command allows attaching additional devices to the file system. The syntax for mounting is:
+
+mount -t <type> <device> <directory>
+
+Use the command to mount ISO files, USB drives, NFS, etc.
+
+42. reboot command
+The reboot command restarts the system immediately from the terminal. First, save changes to all files and then run:
+
+reboot
+
+The system reboots instantly.
+
+43. which command
+The which command shows the path of an executable program (command). To see a path for a command, run:
+
+which <command>
+
+For example:
+
+which cat
+
+which cat terminal output
+The output shows the location of the command. Use which to troubleshoot installed programs that do not run.
+
+Note: Check out our guide on adding directories to PATH.
+
+44. nano command
+GNU nano (Nano's another editor) is a keyboard-oriented Linux text editor. You can use Nano to make a new file or open an existing one by running:
+
+nano <filename>
+
+nano exitor file.txt
+The editor automatically opens, allowing you to append text or code to the file. To save and close, press CTRL+X, then Y, and confirm with Enter.
+
+45. vim command
+Vim (Vi improved) is a Linux text editor that runs in the terminal. Here is an example of using a Vim command to make a new file or open an existing one:
+
+vim <filename>
+
+vim editor file.txt
+Press I to enter insert mode and enter some text. To save changes and exit Vim, press Esc, write :wq, and hit Enter.
+
+Note: Vim is not installed by default. Try using the old version (Vi) or install it by following one of our guides:
+
+Install Vim on Ubuntu 18.04
+Install Vim on CentOS 7
+46. whatis command
+The whatis command is a quick way to determine what a command does. Add it as a prefix to any command, for example:
+
+whatis cat
+
+whatis cat terminal output
+The output shows a one-line description for the cat command from the documentation.
+
+47. alias command
+Use the alias command to show and set customized command shortcuts. Without any parameters, alias lists the current shortcuts:
+
+alias
+
+alias terminal output
+To add a new alias, use the following format:
+
+alias <name>=<command>
+
+For example, to set meow as the alias for the cat command, run:
+
+alias meow=cat
+
+alias cat terminal output
+The meow command acts as an alias for the cat command and displays file contents.
+
+48. unalias command
+To remove a defined alias, use the unalias command. For example, to remove the meow alias, run:
+
+unalias meow
+
+unalias cat command terminal output
+Running the same command next time throws an error.
+
+49. clear command
+Use the clear command to clear the contents of the terminal quickly:
+
+clear
+
+The command clears the visual output and sets the terminal line at the top.
+
+Note: Refer to our article How to Clear Terminal in Linux to learn alternative methods for clearing screen in Linux.
+
+50. exit command
+To exit the current terminal session, run the exit command:
+
+exit
+
+If no other sessions were open, the command also closes the terminal.
