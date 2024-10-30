@@ -1,0 +1,178 @@
+	PowerShell Basics
+
+Get-Command
+
+To list all available cmdlets, functions, aliases, and scripts that can be executed in the current PowerShell session, we can use Get-Command. It’s an essential tool for discovering what commands one can use.
+
+Get-Command -CommandType "Function"
+
+or each CommandInfo object retrieved by the cmdlet, some essential information (properties) is displayed on the console. It’s possible to filter the list of commands based on displayed property values. For example, if we want to display only the available commands of type “function”, we can use -CommandType "Function"
+
+Get-Help Get-Date
+
+Another essential cmdlet to keep in our tool belt is Get-Help: it provides detailed information about cmdlets, including usage, parameters, and examples. It’s the go-to cmdlet for learning how to use PowerShell commands. By appending -examples to the command displayed above, we will be shown a list of common ways in which the chosen cmdlet can be used.
+
+Get-Alias
+
+To make the transition easier for IT professionals, PowerShell includes aliases —which are shortcuts or alternative names for cmdlets— for many traditional Windows commands. Indispensable for users already familiar with other command-line tools, Get-Alias lists all aliases available. For example, dir is an alias for Get-ChildItem, and cd is an alias for Set-Location.
+
+Where to Find and Download Cmdlets
+
+To search for modules (collections of cmdlets) in online repositories like the PowerShell Gallery, we can use Find-Module. Sometimes, if we don’t know the exact name of the module, it can be useful to search for modules with a similar name. We can achieve this by filtering the Name property and appending a wildcard (*) to the module’s partial name, using the following standard PowerShell syntax: Cmdlet -Property "pattern*".
+
+Find-Module -Name "PowerShell*"
+
+Once identified, the modules can be downloaded and installed from the repository with Install-Module, making new cmdlets contained in the module available for use.
+
+Install-Module -Name "PowerShellGet"
+
+Questions:
+
+How would you retrieve a list of commands that start with the verb Remove? [for the sake of this question, avoid the use of quotes (" or ') in your answer]
+
+Get-Command -Name Remove*
+
+What cmdlet has its traditional counterpart echo as an alias?
+
+Write-Output
+
+What is the command to retrieve some example usage for the cmdlet New-LocalUser?
+
+Get-Help New-LocalUser -examples
+
+	Navigating the File System and Working with Files
+
+Get-ChildItem
+
+Similar to the dir command in Command Prompt (or ls in Unix-like systems), Get-ChildItem lists the files and directories in a location specified with the -Path parameter. It can be used to explore directories and view their contents. If no Path is specified, the cmdlet will display the content of the current working directory.
+
+Set-Location -Path ".\Documents"
+
+To navigate to a different directory, we can use the Set-Location cmdlet. It changes the current directory, bringing us to the specified path, akin to the cd command in Command Prompt.
+
+New-Item -Path ".\captain-cabin\captain-wardrobe" -ItemType "Directory"
+New-Item -Path ".\captain-cabin\captain-wardrobe\captain-boots.txt" -ItemType "File"     
+
+To create an item in PowerShell, we can use New-Item. We will need to specify the path of the item and its type (whether it is a file or a directory).
+
+Remove-Item -Path ".\captain-cabin\captain-wardrobe\captain-boots.txt"
+Remove-Item -Path ".\captain-cabin\captain-wardrobe" 
+
+Similarly, the Remove-Item cmdlet removes both directories and files, whereas in Windows CLI we have separate commands rmdir and del.
+
+Copy-Item -Path .\captain-cabin\captain-hat.txt -Destination .\captain-cabin\captain-hat2.txt
+Get-ChildItem -Path ".\captain-cabin\" 
+
+We can copy or move files and directories alike, using respectively Copy-Item (equivalent to copy) and Move-Item (equivalent to move).
+
+Get-Content -Path ".\captain-hat.txt"
+
+Finally, to read and display the contents of a file, we can use the Get-Content cmdlet, which works similarly to the type command in Command Prompt (or cat in Unix-like systems).
+
+Questions:
+
+What cmdlet can you use instead of the traditional Windows command type?
+
+Get-Content
+
+What PowerShell command would you use to display the content of the "C:\Users" directory? [for the sake of this question, avoid the use of quotes (" or ') in your answer]
+
+Get-ChildItem -Path C:\Users
+
+	Piping, Filtering, and Sorting Data
+
+Piping is a technique used in command-line environments that allows the output of one command to be used as the input for another. This creates a sequence of operations where the data flows from one command to the next. Represented by the | symbol, piping is widely used in the Windows CLI, as introduced earlier in this module, as well as in Unix-based shells.
+
+Get-ChildItem | Sort-Object Length
+
+Here, Get-ChildItem retrieves the files (as objects), and the pipe (|) sends those file objects to Sort-Object, which then sorts them by their Length (size) property. This object-based approach allows for more detailed and flexible command sequences.
+
+In the example above, we have leveraged the Sort-Object cmdlet to sort objects based on specified properties. Beyond sorting, PowerShell provides a set of cmdlets that, when combined with piping, allow for advanced data manipulation and analysis.
+
+Get-ChildItem | Where-Object -Property "Extension" -eq ".txt" 
+
+To filter objects based on specified conditions, returning only those that meet the criteria, we can use the Where-Object cmdlet. For instance, to list only .txt files in a directory.
+
+Here, Where-Object filters the files by their Extension property, ensuring that only files with extension equal (-eq) to .txt are listed.
+
+The operator -eq (i.e. "equal to") is part of a set of comparison operators that are shared with other scripting languages (e.g. Bash, Python). To show the potentiality of the PowerShell's filtering, we have selected some of the most useful operators from that list:
+
+-ne: "not equal". This operator can be used to exclude objects from the results based on specified criteria.
+-gt: "greater than". This operator will filter only objects which exceed a specified value. It is important to note that this is a strict comparison, meaning that objects that are equal to the specified value will be excluded from the results.
+-ge: "greater than or equal to". This is the non-strict version of the previous operator. A combination of -gt and -eq.
+-lt: "less than". Like its counterpart, "greater than", this is a strict operator. It will include only objects which are strictly below a certain value.
+-le: "less than or equal to". Just like its counterpart -ge, this is the non-strict version of the previous operator. A combination of -lt and -eq.
+
+Below, another example shows that objects can also be filtered by selecting properties that match (-like) a specified pattern:
+
+Get-ChildItem | Where-Object -Property "Name" -like "ship*"  
+
+The next filtering cmdlet, Select-Object, is used to select specific properties from objects or limit the number of objects returned. It’s useful for refining the output to show only the details one needs.
+
+Get-ChildItem | Select-Object Name,Length
+
+The last in this set of filtering cmdlets is Select-String. This cmdlet searches for text patterns within files, similar to grep in Unix-based systems or findstr in Windows Command Prompt. It’s commonly used for finding specific content within log files or documents.
+
+Select-String -Path ".\captain-hat.txt" -Pattern "hat" 
+
+The Select-String cmdlet fully supports the use of regular expressions (regex). This advanced feature allows for complex pattern matching within files, making it a powerful tool for searching and analysing text data.
+
+How would you retrieve the items in the current directory with size greater than 100? [for the sake of this question, avoid the use of quotes (" or ') in your answer]
+
+Get-ChildItem | Where-Object -Property Length -gt 100
+
+	System and Network Information
+
+The Get-ComputerInfo cmdlet retrieves comprehensive system information, including operating system information, hardware specifications, BIOS details, and more. It provides a snapshot of the entire system configuration in a single command. Its traditional counterpart systeminfo retrieves only a small set of the same details.
+
+Get-ComputerInfo
+
+Essential for managing user accounts and understanding the machine’s security configuration, Get-LocalUser lists all the local user accounts on the system. The default output displays, for each user, username, account status, and description.
+
+Get-LocalUser
+
+Similar to the traditional ipconfig command, the following two cmdlets can be used to retrieve detailed information about the system’s network configuration.
+
+Get-NetIPConfiguration provides detailed information about the network interfaces on the system, including IP addresses, DNS servers, and gateway configurations.
+
+Get-NetIPConfiguration
+
+In case we need specific details about the IP addresses assigned to the network interfaces, the Get-NetIPAddress cmdlet will show details for all IP addresses configured on the system, including those that are not currently active.
+
+Get-NetIPAddress
+
+	Real-Time System Analysis
+	
+To gather more advanced system information, especially concerning dynamic aspects like running processes, services, and active network connections, we can leverage a set of cmdlets that go beyond static machine details.
+
+Get-Process provides a detailed view of all currently running processes, including CPU and memory usage, making it a powerful tool for monitoring and troubleshooting.
+
+Get-Process
+
+Similarly, Get-Service allows the retrieval of information about the status of services on the machine, such as which services are running, stopped, or paused. It is used extensively in troubleshooting by system administrators, but also by forensics analysts hunting for anomalous services installed on the system.
+
+Get-Service
+
+To monitor active network connections, Get-NetTCPConnection displays current TCP connections, giving insights into both local and remote endpoints. This cmdlet is particularly handy during an incident response or malware analysis task, as it can uncover hidden backdoors or established connections towards an attacker-controlled server.
+
+Get-NetTCPConnection
+
+Additionally, we are going to mention Get-FileHash as a useful cmdlet for generating file hashes, which is particularly valuable in incident response, threat hunting, and malware analysis, as it helps verify file integrity and detect potential tampering.
+
+Get-FileHash -Path .\ship-flag.txt
+
+	Scripting
+	
+Invoke-Command is essential for executing commands on remote systems, making it fundamental for system administrators, security engineers and penetration testers. Invoke-Command enables efficient remote management and—combining it with scripting—automation of tasks across multiple machines. It can also be used to execute payloads or commands on target systems during an engagement by penetration testers—or attackers alike.
+
+Get-Help Invoke-Command -examples
+
+The second example demonstrates that we don't need to know how to script to benefit from the power of Invoke-Command. In fact, by appending the -ScriptBlock { ... } parameter to the cmdlet's syntax, we can execute any command (or sequence of commands) on the remote computer. The result would be the same as if we were typing the commands in a local PowerShell session on the remote computer itself.
+
+Invoke-Command -ComputerName Server01 -Credential Domain01\User01 -ScriptBlock { Get-Culture }
+
+Question:
+
+What is the syntax to execute the command Get-Service on a remote computer named "RoyalFortune"? Assume you don't need to provide credentials to establish the connection. [for the sake of this question, avoid the use of quotes (" or ') in your answer]
+
+Invoke-Command -ComputerName RoyalFortune -ScriptBlock { Get-service}
