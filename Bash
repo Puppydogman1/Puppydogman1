@@ -1,0 +1,151 @@
+Bash (Bourne Again Shell)
+
+echo $SHELL
+cat /etc/shells
+
+
+	Shell Scripting and Components
+	
+Unlike the other commands we type in the shell, we first need to create a file using any text editor for the script. The file must be named with an extension .sh, the default extension for bash scripts.
+
+nano first_script.sh
+
+Every script should start from shebang. Shebang is a combination of some characters that are added at the beginning of a script, starting with #! followed by the name of the interpreter to use while executing the script. As we are writing our script in bash, let’s define it as the interpreter in the shebang.
+
+#!/bin/bash
+
+	Variables
+A variable stores a value inside it. Suppose you need to use some complex values, like a URL, a file path, etc., several times in your script. Instead of memorizing and writing them repeatedly, you can store them in a variable and use the variable name wherever you need it.
+
+The script below displays a string on the screen: "Hey, what’s your name?” This is done by echo command. The second line of the script contains the code read name. read is used to take input from the user, and name is the variable in which the input would be stored. The last line uses echo to display the welcome line for the user, along with its name stored in the variable.
+
+# Defining the Interpreter 
+#!/bin/bash
+echo "Hey, what’s your name?"
+read name
+echo "Welcome, $name"
+
+To execute the script, we first need to make sure that the script has execution permissions. To give these permissions to the script, we can type the following command in our terminal:
+
+Execution Permission to Script
+user@ubuntu:~$ chmod +x variable_script.sh
+
+Now that the script has execution permissions use ./ before the script name to execute it. We use ./ before the script to run rather than typing the script name directly because ./ tells the shell to execute the file that is present in the current directory. If you don't define ./ before the script name, the shell will search the script in the PATH environment variable (that contains all the directories except the current one), and it will not find the defined script in any of those directories and generate an error. The below terminal shows the script in which we utilized the variables:
+
+Script Execution
+user@ubuntu:~$ ./variable_script.sh
+
+	Loops
+	
+Loop, as the name suggests, is something that is repeating. For example, you have a list of many friends, and you want to send them the same message. Instead of sending them individually, you can make a loop in your script, give your friend list to the loop and the message, and it will send that message to all your friends.
+
+For a general explanation of loops, let’s write a loop that will display all numbers starting from 1 to 10 on the screen:
+
+# Defining the Interpreter 
+#!/bin/bash
+for i in {1..10};
+do
+echo $i
+done
+
+The first line has the variable i that will iterate from 1 to 10 and execute the below code every time. do indicates the start of the loop code, and done indicates the end. In between them, the code we want to execute in the loop is to be written. The for loop will take each number in the brackets and assign it to the variable i in each iteration. The echo $i will display this variable’s value every iteration.
+
+
+
+	Conditional Statements
+	
+Conditional statements are an essential part of scripting. They help you execute a specific code only when a condition is satisfied; otherwise, you can execute another code. Suppose you want to make a script that shows the user a secret. However, you want it to be shown to only some users, only to the high-authority user. You will create a conditional statement that will first ask the user their name, and if that name matches the high authority user’s name, it will display the secret.
+
+# Defining the Interpreter 
+#!/bin/bash
+echo "Please enter your name first:"
+read name
+if [ "$name" = "Stewart" ]; then
+        echo "Welcome Stewart! Here is the secret: THM_Script"
+else
+        echo "Sorry! You are not authorized to access the secret."
+fi
+
+The above script takes the user’s name as input and stores it into a variable (studied in the Variables section). The conditional statement starts with if and compares the value of that variable with the string Stewart; if it’s a match, it will display the secret to the user, or else it will not. The fi is used to end the for loop.
+
+
+	Comments
+Sometimes, the code can be very lengthy. In this scenario, the code might confuse you when you look at it after some time or share it with somebody. An easy way to resolve this problem is to use comments in different parts of the code. A comment is a sentence that we write in our code just for the sake of our understanding. It is written with a # sign followed by a space and the sentence you need to write. For example, let’s rewrite the script we discussed in the conditional statements section and add comments to it.
+
+# Defining the Interpreter
+#!/bin/bash
+
+# Asking the user to enter a value.
+echo "Please enter your name first:"
+
+# Storing the user input value in a variable.
+read name
+
+# Checking if the name the user entered is equal to our required name.
+if [ "$name" = "Stewart" ]; then
+
+# If it equals the required name, the following line will be displayed.
+echo "Welcome Stewart! Here is the secret: THM_Script"
+
+# Defining the sentence to be displayed if the condition fails.
+else
+        echo "Sorry! You are not authorized to access the secret."
+fi
+
+	The Locker Script
+
+Script
+# Defining the Interpreter 
+#!/bin/bash 
+
+# Defining the variables
+username=""
+companyname=""
+pin=""
+
+# Defining the loop
+for i in {1..3}; do
+# Defining the conditional statements
+        if [ "$i" -eq 1 ]; then
+                echo "Enter your Username:"
+                read username
+        elif [ "$i" -eq 2 ]; then
+                echo "Enter your Company name:"
+                read companyname
+        else
+                echo "Enter your PIN:"
+                read pin
+        fi
+done
+
+# Checking if the user entered the correct details
+if [ "$username" = "John" ] && [ "$companyname" = "Tryhackme" ] && [ "$pin" = "7385" ]; then
+        echo "Authentication Successful. You can now access your locker, John."
+else
+        echo "Authentication Denied!!"
+fi
+
+Question:
+
+What would be the correct PIN to authenticate in the locker script?
+
+A: 7385
+
+#!/bin/bash
+
+# Defining the directory to search our flag
+directory="/home/user"
+
+# Defining the flag to search
+flag="thm-flag01-script"
+
+echo "Flag search in directory: $directory in progress..."
+
+# Defining for loop to iterate over all the files with .log ext>
+for file in "/var/log"/*.log; do
+    # Check if the file contains the flag
+    if grep -q "$flag" "$file"; then
+        # Print the filename
+        echo "Flag found in: $(basename "$file")"
+    fi
+done
