@@ -1,0 +1,35 @@
+NMAP:
+
+NMAP:
+
+https://www.stationx.net/nmap-cheat-sheet/
+
+http://IP_ADDRESS:PORT_NUMBER
+
+Nmap is a network scanner, Nmap is used to discover hosts and services on a computer network by sending packets and analyzing the responses.
+
+IP range using -: If you want to scan all the IP addresses from 192.168.0.1 to 192.168.0.10, you can write 192.168.0.1-10
+IP subnet using /: If you want to scan a subnet, you can express it as 192.168.0.1/24, and this would be equivalent to 192.168.0.0-255
+Hostname: You can also specify your target by hostname, for example, example.thm
+
+Before we get started, we should note that throughout this room, we are either running nmap as root or using sudo because we don’t want to restrict Nmap’s abilities with our account privileges. Running Nmap as a local (non-root) user would limit us to fundamental types of scans such as ICMP echo and TCP connect scans; we will revisit this at the end of this room.
+
+-F is for Fast mode, which scans the 100 most common ports (instead of the default 1000).
+
+-r The following command is used to perform a sequential port scan on the specified target system(s). When you run this command, nmap will scan the ports on the target system(s) in the order of port 1, port 2, port 3, and so on, until the highest port number is reached (typically 65535 for TCP ports).
+
+Option	Explanation
+-O	OS detection
+-sV	Service and version detection
+-A	OS detection, version detection, and other additions
+-Pn	Scan hosts that appear to be down
+
+Timing	Total Duration
+T0 (paranoid)	9.8 hours
+T1 (sneaky)	27.53 minutes
+T2 (polite)	40.56 seconds
+T3 (normal)	0.15 seconds
+T4 (aggressive)	0.13 seconds
+
+Option	Explanation
+-T<0-5>	Timing template – paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5)
