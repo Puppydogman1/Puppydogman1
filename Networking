@@ -1,0 +1,407 @@
+	Networking:
+
+Layer 	Number		Layer Name			Main Function											Example Protocols and Standards
+Layer 	7			Application layer	Providing services and interfaces to applications		HTTP, FTP, DNS, POP3, SMTP, IMAP
+Layer 	6			Presentation layer	Data encoding, encryption, and compression				Unicode, MIME, JPEG, PNG, MPEG
+Layer 	5			Session layer		Establishing, maintaining, and synchronising sessions	NFS, RPC
+Layer 	4			Transport layer		End-to-end communication and data segmentation			UDP, TCP
+Layer 	3			Network layer		Logical addressing and routing between networks			IP, ICMP, IPSec
+Layer 	2			Data link layer		Reliable data transfer between adjacent nodes			Ethernet (802.3), WiFi (802.11)
+Layer 	1			Physical layer		Physical data transmission media						Electrical, optical, and wireless signals
+
+192.168.1.1.
+0-255 for each octet
+octet 1 = 192.
+octet 2 = .168
+octet 3 = .1
+octet 4 = .1
+
+ifconfig
+
+wlo1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.66.89  netmask 255.255.255.0  broadcast 192.168.66.255
+        inet6 fe80::73e1:ca5e:3f93:b1b3  prefixlen 64  scopeid 0x20<link>
+        ether cc:5e:f8:02:21:a7  txqueuelen 1000  (Ethernet)
+        RX packets 19684680  bytes 18865072842 (17.5 GiB)
+        RX errors 0  dropped 364  overruns 0  frame 0
+        TX packets 14439678  bytes 8773200951 (8.1 GiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+		
+The terminal output above indicates the following:
+
+The host (laptop) IP address is 192.168.66.89
+The subnet mask is 255.255.255.0
+The broadcast address is 192.168.66.255
+
+If you are wondering, a subnet mask of 255.255.255.0 can also be written as /24. The /24 means that the leftmost 24 bits within the IP address do not change across the network, i.e., the subnet. In other words, the leftmost three octets are the same across the whole subnet; therefore, we can expect to find addresses that range from 192.168.66.1 to 192.168.66.254. Similar to what was mentioned earlier, 192.168.66.0 and 192.168.66.255 are the network and broadcast addresses, respectively.
+
+Private Addresses
+As we are explaining IP addresses, it is useful to mention that for most practical purposes, there are two types of IP addresses:
+
+Public IP addresses
+Private IP addresses
+RFC 1918 defines the following three ranges of private IP addresses:
+
+10.0.0.0 - 10.255.255.255 (10/8)
+172.16.0.0 - 172.31.255.255 (172.16/12)
+192.168.0.0 - 192.168.255.255 (192.168/16)
+
+The IP protocol allows us to reach a destination host on the network; the host is identified by its IP address. We need protocols that would enable processes on networked hosts to communicate with each other. There are two transport protocols to achieve that: UDP and TCP.
+
+	UDP
+UDP (User Datagram Protocol) allows us to reach a specific process on this target host. UDP is a simple connectionless protocol that operates at the transport layer, i.e., layer 4. Being connectionless means that it does not need to establish a connection. UDP does not even provide a mechanism to know that the packet has been delivered.
+
+An IP address identifies the host; we need a mechanism to determine the sending and receiving process. This can be achieved by using port numbers. A port number uses two octets; consequently, it ranges between 1 and 65535; port 0 is reserved. (The number 65535 is calculated by the expression 216 − 1.)
+
+A real-life example similar to UDP is the standard mail service, with no delivery confirmation. In other words, there is no guarantee that the UDP packet has been received successfully, similar to the case of sending a parcel using standard mail with no confirmation of delivery. In the case of standard mail, it means a cheaper cost than the mail delivery options with confirmation. In the case of UDP, it means better speed than a transport protocol that provides “confirmation.”
+
+But what if we want a transport protocol that acknowledges received packets? The answer lies in using TCP instead of UDP.
+
+	TCP
+TCP (Transmission Control Protocol) is a connection-oriented transport protocol. It uses various mechanisms to ensure reliable data delivery sent by the different processes on the networked hosts. Like UDP, it is a layer 4 protocol. Being connection-oriented, it requires the establishment of a TCP connection before any data can be sent.
+
+In TCP, each data octet has a sequence number; this makes it easy for the receiver to identify lost or duplicated packets. The receiver, on the other hand, acknowledges the reception of data with an acknowledgement number specifying the last received octet.
+
+A TCP connection is established using what’s called a three-way handshake. Two flags are used: SYN (Synchronise) and ACK (Acknowledgment). The packets are sent as follows:
+
+SYN Packet: The client initiates the connection by sending a SYN packet to the server. This packet contains the client’s randomly chosen initial sequence number.
+SYN-ACK Packet: The server responds to the SYN packet with a SYN-ACK packet, which adds the initial sequence number randomly chosen by the server.
+ACK Packet: The three-way handshake is completed as the client sends an ACK packet to acknowledge the reception of the SYN-ACK packet.
+
+Similar to UDP, TCP identifies the process of initiating or waiting (listening) for a connection using port numbers. As stated, a valid port number ranges between 1 and 65535 because it uses two octets and port 0 is reserved.
+
+Encapsulation is an essential concept as it allows each layer to focus on its intended function. In the image below, we have the following four steps:
+
+Application data: It all starts when the user inputs the data they want to send into the application. For example, you write an email or an instant message and hit the send button. The application formats this data and starts sending it according to the application protocol used, using the layer below it, the transport layer.
+
+Transport protocol segment or datagram: The transport layer, such as TCP or UDP, adds the proper header information and creates the TCP segment (or UDP datagram). This segment is sent to the layer below it, the network layer.
+
+Network packet: The network layer, i.e. the Internet layer, adds an IP header to the received TCP segment or UDP datagram. Then, this IP packet is sent to the layer below it, the data link layer.
+
+Data link frame: The Ethernet or WiFi receives the IP packet and adds the proper header and trailer, creating a frame.
+We start with application data. 
+
+At the transport layer, we add a TCP or UDP header to create a TCP segment or UDP datagram. Again, at the network layer, we add the proper IP header to get an IP packet that can be routed over the Internet. 
+
+Finally, we add the appropriate header and trailer to get a WiFi or Ethernet frame at the link layer.
+
+The Life of a Packet
+Based on what we have studied so far, we can explain a simplified version of the packet’s life. Let’s consider the scenario where you search for a room on TryHackMe.
+
+On the TryHackMe search page, you enter your search query and hit enter.
+Your web browser, using HTTPS, prepares an HTTP request and pushes it to the layer below it, the transport layer.
+The TCP layer needs to establish a connection via a three-way handshake between your browser and the TryHackMe web server. After establishing the TCP connection, it can send the HTTP request containing the search query. Each TCP segment created is sent to the layer below it, the Internet layer.
+
+The IP layer adds the source IP address, i.e., your computer, and the destination IP address, i.e., the IP address of the TryHackMe web server. For this packet to reach the router, your laptop delivers it to the layer below it, the link layer.
+Depending on the protocol, The link layer adds the proper link layer header and trailer, and the packet is sent to the router.
+
+The router removes the link layer header and trailer, inspects the IP destination, among other fields, and routes the packet to the proper link. Each router repeats this process until it reaches the router of the target server.
+The steps will then be reversed as the packet reaches the router of the destination network. As we cover additional protocols, we will revisit this exercise and create a more in-depth version.
+
+
+	DHCP: Give Me My Network Settings
+
+Whenever we want to access a network, at the very least, we need to configure the following:
+
+IP address along with subnet mask
+Router (or gateway)
+DNS server
+
+DHCP follows four steps: Discover, Offer, Request, and Acknowledge (DORA):
+
+DHCP Discover: The client broadcasts a DHCPDISCOVER message seeking the local DHCP server if one exists.
+DHCP Offer: The server responds with a DHCPOFFER message with an IP address available for the client to accept.
+DHCP Request: The client responds with a DHCPREQUEST message to indicate that it has accepted the offered IP.
+DHCP Acknowledge: The server responds with a DHCPACK message to confirm that the offered IP address is now assigned to this client.
+
+The following packet capture shows the four steps explained above. In this example, the client gets the address 192.168.66.133.
+
+    1   0.000000      0.0.0.0 → 255.255.255.255 DHCP 342 DHCP Discover - Transaction ID 0xfb92d53f
+    2   0.013904 192.168.66.1 → 192.168.66.133 DHCP 376 DHCP Offer    - Transaction ID 0xfb92d53f
+    3   4.115318      0.0.0.0 → 255.255.255.255 DHCP 342 DHCP Request  - Transaction ID 0xfb92d53f
+    4   4.228117 192.168.66.1 → 192.168.66.133 DHCP 376 DHCP ACK      - Transaction ID 0xfb92d53f
+	
+In the DHCP packet exchange, we can notice the following:
+
+The client starts without any IP network configuration. It only has a MAC address. In the first and third packets, DHCP Discover and DHCP Request, the client searching for a DHCP server still has no IP network configuration and has not yet used the DHCP server’s offered IP address. Therefore, it sends packets from the IP address 0.0.0.0 to the broadcast IP address 255.255.255.255.
+As for the link layer, in the first and third packets, the client sends to the broadcast MAC address, ff:ff:ff:ff:ff:ff (not shown in the output above). The DHCP server offers an available IP address along with the network configuration in the DHCP offer. It uses the client’s destination MAC address. (It used the proposed IP address in this example system.)
+At the end of the DHCP process, our device would have received all the configuration needed to access the network or even the Internet. In particular, we expect that the DHCP server has provided us with the following:
+
+The leased IP address to access network resources
+The gateway to route our packets outside the local network
+A DNS server to resolve domain names (more on this later)
+
+	ARP: Bridging Layer 3 Addressing to Layer 2 Addressing
+
+Address Resolution Protocol (ARP) makes it possible to find the MAC address of another device on the Ethernet. In the example below, a host with the IP address 192.168.66.89 wants to communicate with another system with the IP address 192.168.66.1. It sends an ARP Request asking the host with the IP address 192.168.66.1 to respond. The ARP Request is sent from the MAC address of the requester to the broadcast MAC address, ff:ff:ff:ff:ff:ff as shown in the first packet. The ARP Reply arrived shortly afterwards, and the host with the IP address 192.168.66.1 responded with its MAC address. From this point, the two hosts can exchange data link layer frames.
+
+ 1 0.000000000 cc:5e:f8:02:21:a7 → ff:ff:ff:ff:ff:ff ARP 42 Who has 192.168.66.1? Tell 192.168.66.89
+ 2 0.003566632 44:df:65:d8:fe:6c → cc:5e:f8:02:21:a7 ARP 42 192.168.66.1 is at 44:df:65:d8:fe:6c
+ 
+ If we use tcpdump, the packets will be displayed differently. It uses the terms ARP Request and ARP Reply. For your information, the output is shown in the terminal below.
+
+17:23:44.506615 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.66.1 tell 192.168.66.89, length 28
+17:23:44.510182 ARP, Ethernet (len 6), IPv4 (len 4), Reply 192.168.66.1 is-at 44:df:65:d8:fe:6c, length 28
+
+OSPF (Open Shortest Path First): OSPF is a routing protocol that allows routers to share information about the network topology and calculate the most efficient paths for data transmission. It does this by having routers exchange updates about the state of their connected links and networks. This way, each router has a complete map of the network and can determine the best routes to reach any destination.
+
+EIGRP (Enhanced Interior Gateway Routing Protocol): EIGRP is a Cisco proprietary routing protocol that combines aspects of different routing algorithms. It allows routers to share information about the networks they can reach and the cost (like bandwidth or delay) associated with those routes. Routers then use this information to choose the most efficient paths for data transmission.
+
+BGP (Border Gateway Protocol): BGP is the primary routing protocol used on the Internet. It allows different networks (like those of Internet Service Providers) to exchange routing information and establish paths for data to travel between these networks. BGP helps ensure data can be routed efficiently across the Internet, even when traversing multiple networks.
+
+RIP (Routing Information Protocol): RIP is a simple routing protocol often used in small networks. Routers running RIP share information about the networks they can reach and the number of hops (routers) required to get there. As a result, each router builds a routing table based on this information, choosing the routes with the fewest hops to reach each destination.
+
+NAT:
+
+The idea behind NAT lies in using one public IP address to provide Internet access to many private IP addresses. In other words, if you are connecting a company with twenty computers, you can provide Internet access to all twenty computers by using a single public IP address instead of twenty public IP addresses. (Note: Technically speaking, the number of IP addresses is always expressed as a power of two. To be technically accurate, with NAT, you reserve two public IP addresses instead of thirty-two. Consequently, you would have saved thirty public IP addresses.)
+
+
+Route of packets as they travel to their destination server. What protocol would let me discover the path?
+ICMP
+I want to confirm that I can exchange packets with another host as if I am playing 'ping pong'. Which protocol supports this?
+ICMP
+
+We need to give 25 devices Internet access; however, we only have one public IP address. What can we use to allow multiple private IP addresses to use a single public IP address?
+NAT
+
+I want to obtain an IP address to use and communicate with the other hosts on the network. What should I use?
+DHCP
+I want to find out the DNS server and default route on a network automatically. Which protocol should I use?
+DHCP
+
+I want to find another host's hardware (MAC) address on the network. Which protocol lets me get this information?
+ARP
+
+	DNS: Remembering Addresses
+	
+Domain Name System (DNS), which is responsible for properly mapping a domain name to an IP address.
+
+DNS operates at the Application Layer, i.e., Layer 7 of the ISO OSI model. DNS traffic uses UDP port 53 by default and TCP port 53 as a default fallback. There are many types of DNS records; however, in this task, we will focus on the following four:
+
+A record: The A (Address) record maps a hostname to one or more IPv4 addresses. For example, you can set example.com to resolve to 172.17.2.172.
+AAAA Record: The AAAA record is similar to the A Record, but it is for IPv6. Remember that it is AAAA (quad-A), as AA and AAA would refer to a battery size; furthermore, AAA refers to Authentication, Authorization, and Accounting; neither falls under DNS.
+CNAME Record: The CNAME (Canonical Name) record maps a domain name to another domain name. For example, www.example.com can be mapped to example.com or even to example.org.
+MX Record: The MX (Mail Exchange) record specifies the mail server responsible for handling emails for a domain.
+
+In other words, when you type example.com in your browser, your browser tries to resolve this domain name by querying the DNS server for the A record. However, when you try to send an email to test@example.com, the mail server would query the DNS server to find the MX record.
+
+In the previous task, we covered how a domain name is resolved into an IP address. However, for this to happen, someone needs to have the authority to set the A, AAAA, and MX records, among other DNS records for the domain. Whoever registers a domain name is granted this power. Therefore, if you register example.com, you can set any valid DNS records for example.com.
+
+You can register any available domain name for one or more years. You need to pay the annual fee, and you are required to provide accurate contact information as the registrant. This information is part of the data available via WHOIS records and is available publicly. (Although written in uppercase, WHOIS is not an acronym; it is pronounced who is.) 
+
+	HTTP(S): Accessing the Web
+	
+When you fire up your browser, you mainly use HTTP and HTTPS protocols. HTTP stands for Hypertext Transfer Protocol; the S in HTTPS stands for Secure. This protocol relies on TCP and defines how your web browser communicates with the web servers.
+
+Some of the commands or methods that your web browser commonly issues to the web server are:
+
+GET retrieves data from a server, such as an HTML file or an image.
+POST allows us to submit new data to the server, such as submitting a form or uploading a file.
+PUT is used to create a new resource on the server and to update and overwrite existing information.
+DELETE, as the name suggests, is used to delete a specified file or resource on the server.
+
+HTTP and HTTPS commonly use TCP ports 80 and 443, respectively, and less commonly other ports such as 8080 and 8443.
+
+In the following example, we use our Firefox browser to access the web server on MACHINE_IP. Our browser fetches the web page and displays it perfectly; however, we are interested in what happens behind the scenes.
+
+telnet <ip> 80
+GET /flag.html
+
+As you remember from Networking Concepts, we used the telnet client to connect to the web server running on 10.10.25.222 at port 80. We had to send a couple of lines: GET / HTTP/1.1 and Host: anything to get the page we wanted. (On some servers, you might get the file without sending Host: anything.) You can use this method to access any page and not just the default page /. To get file.html, you would send GET /file.html HTTP/1.1, for instance (GET /file.html might work depending on the web server in use). This approach is efficient for troubleshooting as you would be “talking HTTP” with the server.
+
+	FTP: Transferring Files
+
+Unlike HTTP, which is designed to retrieve web pages, File Transfer Protocol (FTP) is designed to transfer files. As a result, FTP is very efficient for file transfer, and when all conditions are equal, it can achieve higher speeds than HTTP.
+
+Example commands defined by the FTP protocol are:
+
+USER is used to input the username
+PASS is used to enter the password
+RETR (retrieve) is used to download a file from the FTP server to the client.
+STOR (store) is used to upload a file from the client to the FTP server.
+FTP server listens on TCP port 21 by default; data transfer is conducted via another connection from the client to the server.
+
+In the terminal below we executed the command ftp 10.10.25.222 to connect to the remote FTP server using the local ftp client. Then we went through the following steps:
+
+We used the username anonymous to log in
+We didn’t need to provide any password
+Issuing ls returned a list of files available for download
+type ascii switched to ASCII mode as this is a text file
+get coffee.txt allowed us to retrieve the file we want
+The command exchange via the FTP client is shown in the terminal below.
+
+*Notice how various commands differ between the client and the server. For example, when you type ls on the client, the client sends LIST to the server. One last thing to note is that the directory listing and the file we downloaded are sent over a separate connection each.
+
+	SMTP: Sending Email
+
+As with browsing the web and downloading files, sending email needs its own protocol. Simple Mail Transfer Protocol (SMTP) defines how a mail client talks with a mail server and how a mail server talks with another.
+
+The analogy for the SMTP protocol is when you go to the local post office to send a package. You greet the employee, tell them where you want to send your package, and provide the sender’s information before handing them the package. Depending on the country you are in, you might be asked to show your identity card. This process is not very different from an SMTP session.
+
+Let’s present some of the commands used by your mail client when it transfers an email to an SMTP server:
+
+HELO or EHLO
+MAIL FROM specifies the sender’s email address
+RCPT TO specifies the recipient’s email address
+DATA indicates that the client will begin sending the content of the email message.
+. is sent on a line by itself to indicate the end of the
+
+	POP3: Receiving Email
+	
+You’ve received an email and want to download it to your local mail client. The Post Office Protocol version 3 (POP3) is designed to allow the client to communicate with a mail server and retrieve email messages.
+
+Without going into in-depth technical details, an email client sends its messages by relying on SMTP and retrieves them using POP3. SMTP is similar to handing your envelope or package to the post office, and POP3 is similar to checking your local mailbox for new letters or packages.
+
+Some common POP3 commands are:
+
+USER <username> identifies the user
+PASS <password> provides the user’s password
+STAT requests the number of messages and total size
+LIST lists all messages and their sizes
+RETR <message_number> retrieves the specified message
+DELE <message_number> marks a message for deletion
+QUIT ends the POP3 session applying changes, such as deletions
+
+	IMAP: Synchronizing Email
+	
+POP3 is enough when working from one device, e.g., your favourite email client on your desktop computer. However, what if you want to check your email from your office desktop computer and from your laptop or smartphone? In this scenario, you need a protocol that allows synchronization of messages instead of deleting a message after retrieving it. One solution to maintaining a synchronized mailbox across multiple devices is Internet Message Access Protocol (IMAP).
+
+IMAP allows synchronizing read, moved, and deleted messages. IMAP is quite convenient when you check your email via multiple clients. Unlike POP3, which tends to minimize server storage as email is downloaded and deleted from the remote server, IMAP tends to use more storage as email is kept on the server and synchronized across the email clients.
+
+The IMAP protocol commands are more complicated than the POP3 protocol commands. We list a few examples below:
+
+LOGIN <username> <password> authenticates the user
+SELECT <mailbox> selects the mailbox folder to work with
+FETCH <mail_number> <data_item_name> Example fetch 3 body[] to fetch message number 3, header and body.
+MOVE <sequence_set> <mailbox> moves the specified messages to another mailbox
+COPY <sequence_set> <data_item_name> copies the specified messages to another mailbox
+LOGOUT logs out
+
+Protocol	Transport Protocol	Default Port Number
+TELNET		TCP					23
+DNS			UDP or TCP			53
+HTTP		TCP					80
+HTTPS		TCP					443
+FTP			TCP					21
+SMTP		TCP					25
+POP3		TCP					110
+IMAP		TCP					143
+
+HTTP Over TLS
+HTTPS stands for Hypertext Transfer Protocol Secure. It is basically HTTP over TLS. Consequently, requesting a page over HTTPS will require the following three steps (after resolving the domain name):
+
+Establish a TCP three-way handshake with the target server
+Establish a TLS session
+Communicate using the HTTP protocol; for example, issue HTTP requests, such as GET / HTTP/1.1
+
+Adding TLS to SMTP, POP3, and IMAP is no different than adding TLS to HTTP. Similar to how HTTP gets an appended S for Secure and becomes HTTPS, SMTP, POP3, and IMAP become SMTPS, POP3S, and IMAPS, respectively. Using these protocols over TLS is no different than using HTTP over TLS; therefore, almost all the points from the HTTPS discussion apply to these protocols.
+
+The insecure versions use the default TCP port numbers shown in the table below:
+
+Protocol	Default Port Number
+HTTP		80
+SMTP		25
+POP3		110
+IMAP		143
+
+The secure versions, i.e., over TLS, use the following TCP port numbers by default:
+
+Protocol	Default Port Number
+HTTPS		443
+SMTPS		465 and 587
+POP3S		995
+IMAPS		993
+
+SFTP stands for SSH File Transfer Protocol and allows secure file transfer. It is part of the SSH protocol suite and shares the same port number, 22. If enabled in the OpenSSH server configuration, you can connect using a command such as sftp username@hostname. Once logged in, you can issue commands such as get filename and put filename to download and upload files, respectively. Generally speaking, SFTP commands are Unix-like and can differ from FTP commands.
+
+SFTP should not be confused with FTPS. You are right to think that FTPS stands for File Transfer Protocol Secure. How is FTPS secured? Yes, you are correct to estimate that it is secured using TLS, just like HTTPS. While FTP uses port 21, FTPS usually uses port 990. It requires certificate setup, and it can be tricky to allow over strict firewalls as it uses separate connections for control and data transfer.
+
+Setting up an SFTP server is as easy as enabling an option within the OpenSSH server. Like HTTPS, SMTPS, POP3S, IMAPS, and other protocols that rely on TLS for security, FTPS requires a proper TLS certificate to run securely.
+
+	Packet Details
+	
+The Frame (Layer 1): This will show you what frame/packet you are looking at and details specific to the Physical layer of the OSI model.
+
+Source [MAC] (Layer 2): This will show you the source and destination MAC Addresses; from the Data Link layer of the OSI model.
+
+Source [IP] (Layer 3): This will show you the source and destination IPv4 Addresses; from the Network layer of the OSI model.
+
+Protocol (Layer 4): This will show you details of the protocol used (UDP/TCP) and source and destination ports; from the Transport layer of the OSI model.
+
+Protocol Errors: This continuation of the 4th layer shows specific segments from TCP that needed to be reassembled.
+
+Application Protocol (Layer 5): This will show details specific to the protocol used, such as HTTP, FTP,  and SMB. From the Application layer of the OSI model.
+
+Application Data: This extension of the 5th layer can show the application-specific data.
+
+	Tcpdump: The Basics
+	
+The Tcpdump tool and its libpcap library 
+
+It is important to note that capturing packets requires you to be logged-in as root or to use sudo.
+	
+The libpcap library is the foundation for various other networking tools today. Moreover, it was ported to MS Windows as winpcap.
+
+A command such as ip address show (or merely ip a s) would list the available network interfaces.
+The first thing to decide is which network interface to listen to using -i INTERFACE. You can choose to listen on all available interfaces using -i any; alternatively, you can specify an interface you want to listen on, such as -i eth0.
+
+sudo tcpdump -i ens5 -c 5 -n
+
+-c You can specify the number of packets to capture by specifying the count using -c COUNT. Without specifying a count, the packet capture will continue till you interrupt it, for example, by pressing CTRL-C. Depending on your goal, you only need a limited number of packets.
+
+-n Tcpdump will resolve IP addresses and print friendly domain names where possible. To avoid making such DNS lookups, you can use the -n argument. Similarly, if you don’t want port numbers to be resolved, such as 80 being resolved to http, you can use the -nn to stop both DNS and port number lookups. 
+
+-v If you want to print more details about the packets, you can use -v to produce a slightly more verbose output. 
+
+Summary and Examples
+The table below provides a summary of the command line options that we covered.
+
+Command	Explanation
+tcpdump -i 	INTERFACE	Captures packets on a specific network interface
+tcpdump -w 	FILE		Writes captured packets to a file
+tcpdump -r 	FILE		Reads captured packets from a file
+tcpdump -c 	COUNT		Captures a specific number of packets
+tcpdump -n	Don’t resolve IP addresses
+tcpdump -nn	Don’t resolve IP addresses and don’t resolve protocol numbers
+tcpdump -v	Verbose display; verbosity can be increased with -vv and -vvv
+
+If you want to limit the packets to those from a particular source IP address or hostname, you must use src host IP or src host HOSTNAME. Similarly, you can limit packets to those sent to a specific destination using dst host IP or dst host HOSTNAME.
+
+sudo tcpdump host example.com -w http.pcap
+
+sudo tcpdump -i ens5 port 53 -n
+
+Three logical operators that can be handy:
+
+and: Captures packets where both conditions are true. For example, tcpdump host 1.1.1.1 and tcp captures tcp traffic with host 1.1.1.1.
+or: Captures packets when either one of the conditions is true. For instance, tcpdump udp or icmp captures UDP or ICMP traffic.
+not: Captures packets when the condition is not true. For example, tcpdump not tcp captures all packets except TCP segments; we expect to find UDP, ICMP, and ARP packets among the results.
+Summary and Examples
+The table below offers a summary of the command line options that we covered.
+
+Command	Explanation
+tcpdump host IP or tcpdump host HOSTNAME	Filters packets by IP address or hostname
+tcpdump src host IP or	Filters packets by a specific source host
+tcpdump dst host IP	Filters packets by a specific destination host
+tcpdump port PORT_NUMBER	Filters packets by port number
+tcpdump src port PORT_NUMBER	Filters packets by the specified source port number
+tcpdump dst port PORT_NUMBER	Filters packets by the specified destination port number
+tcpdump PROTOCOL	Filters packets by protocol; examples include ip, ip6, and icmp
+Consider the following examples:
+
+tcpdump -i any tcp port 22 listens on all interfaces and captures tcp packets to or from port 22, i.e., SSH traffic.
+tcpdump -i wlo1 udp port 123 listens on the WiFi network card and filters udp traffic to port 123, the Network Time Protocol (NTP).
+tcpdump -i eth0 host example.com and tcp port 443 -w https.pcap will listen on eth0, the wired Ethernet interface and filter traffic exchanged with example.com that uses tcp and port 443. In other words, this command is filtering HTTPS traffic related to example.com.
+
+Tcpdump is a rich program with many options to customize how the packets are printed and displayed. We have selected to cover the following five options:
+
+
+Summary and Examples
+The table below provides a summary of the command line options that we covered.
+
+Command	Explanation
+tcpdump -q	Quick and quite: brief packet information
+tcpdump -e	Include MAC addresses
+tcpdump -A	Print packets as ASCII encoding
+tcpdump -xx	Display packets in hexadecimal format
+tcpdump -X	Show packets in both hexadecimal and ASCII formats
