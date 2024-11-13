@@ -31,6 +31,11 @@ https://www.google.com/advanced_search
 https://www.exploit-db.com/google-hacking-database
 https://www.googleguide.com/print/adv_op_ref.pdf
 
+Hashing:
+https://hashes.com/en/decrypt/hash
+https://hashcat.net/wiki/doku.php?id=example_hashes
+https://crackstation.net/
+
 IoC(s) Converter:
 https://uncoder.io/
 
@@ -99,6 +104,7 @@ https://redirectdetective.com/
 https://dfir.blog/unfurl/
 https://research.domaintools.com/
 https://web.archive.org/
+https://www.wappalyzer.com/
 
 User Agent Strings:
 https://isbot.js.org/
