@@ -1,0 +1,2 @@
+Remember, to access the Frosty Pines Resorts website (http://frostypines.thm), you will need to reference it in your hosts file. On the AttackBox, this can be done by executing the following command in a terminal: 
+echo "10.10.208.112 frostypines.thm" >> /etc/hosts
