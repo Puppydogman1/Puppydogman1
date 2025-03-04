@@ -56,6 +56,9 @@ https://hashes.com/en/decrypt/hash
 https://hashcat.net/wiki/doku.php?id=example_hashes
 https://crackstation.net/
 
+Investigations:
+https://knowledge.sittadel.com/monitor-respond-risky-users-queue
+
 IoC(s) Converter:
 https://uncoder.io/
 
@@ -69,6 +72,7 @@ https://talosintelligence.com/reputation_center
 KQL:
 https://www.kqlsearch.com/
 https://github.com/SecurityAura/DE-TH-Aura/tree/main/100DaysOfKQL
+https://github.com/ml58158/Demystifying-KQL/blob/main/Demystifying-KQL.pdf
 
 Malware:
 https://bazaar.abuse.ch/browse/
